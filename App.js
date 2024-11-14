@@ -1,10 +1,10 @@
 import { View } from 'react-native';
 import { Intro } from './Framework/Screens/Intro';
+import { StackNavigator } from './Framework/Navigation/StackNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
   return (
-    <View style={{ flex: 1 }}>
-      <Intro />
-    </View>
+    <StackNavigator />
   );
 }
