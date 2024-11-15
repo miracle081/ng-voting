@@ -8,7 +8,7 @@ export function Intro({ navigation }) {
             <View style={styles.container}>
                 <View></View>
                 <Text style={styles.header}>NG Voting</Text>
-                <AppButton onPress={() => navigation.navigate("HomeScreen")}>Get Started</AppButton>
+                <AppButton onPress={() => navigation.navigate("SignIn")}>Get Started</AppButton>
             </View>
         </ImageBackground >
     )
