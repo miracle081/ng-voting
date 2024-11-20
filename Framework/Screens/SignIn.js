@@ -3,7 +3,7 @@ import { Theme } from "../Components/Theme";
 import { AppButton } from "../Components/AppButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export function SignIn() {
+export function SignIn({ navigation }) {
     return (
         <View style={styles.container}>
             <ImageBackground source={require("../../assets/NG-flag.jpg")} style={{ width: "100%", height: 250, borderRadius: 10, }}>
@@ -11,7 +11,6 @@ export function SignIn() {
                     <View style={{ marginLeft: 20 }}>
                         <Text style={[styles.header, { color: "white" }]}>Welcome Back</Text>
                         <Text style={[styles.text, { color: "white" }]}>Sign in to continue</Text>
-
                     </View>
                 </SafeAreaView>
             </ImageBackground>
@@ -32,7 +31,7 @@ export function SignIn() {
                 <TouchableOpacity style={{ alignSelf: "flex-end", marginBottom: 15 }}>
                     <Text style={{ fontSize: 18, color: Theme.colors.primary, fontFamily: Theme.fonts.text700 }}>Forgotten Password?</Text>
                 </TouchableOpacity>
-                <AppButton>Sign In</AppButton>
+                <AppButton onPress={() => navigation.navigate("HomeScreen")}>Sign In</AppButton>
             </View>
         </View>
     )
