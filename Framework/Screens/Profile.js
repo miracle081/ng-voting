@@ -74,8 +74,7 @@ export function Profile({ navigation }) {
                 transparent={true}
             >
                 <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
-                    <Pressable style={{ flex: 1 }} onPress={closeModal} >
-                    </Pressable>
+                    <Pressable style={{ flex: 1 }} onPress={closeModal} ></Pressable>
                     <View style={{ height: 200, backgroundColor: Theme.colors.light.bg, borderTopRightRadius: 20, borderTopLeftRadius: 20, justifyContent: "center" }}>
                         <Text style={{ fontSize: 16, fontFamily: Theme.fonts.text400, textAlign: "center" }}>Are you sure you want to log out?</Text>
 
