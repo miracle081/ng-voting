@@ -1,14 +1,15 @@
 import { View, StyleSheet, Text, TouchableOpacity, Image, Modal, Pressable, ScrollView, RefreshControl } from "react-native";
 import { Theme } from "../Components/Theme";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { formatMoney } from "../Components/FormatMoney";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUserCircle, faUserEdit, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppButton } from "../Components/AppButton";
+import { AppContext } from "../Components/globalVariables";
 
 export function Profile({ navigation }) {
-    // const { userInfo, setPreloader, } = useContext(AppContext);
+    const { userInfo, setPreloader, } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
 
     const closeModal = () => {
@@ -44,8 +45,8 @@ export function Profile({ navigation }) {
                             source={require("../../assets/user.jpg")} />
 
                         <View style={{ marginBottom: 10, }}>
-                            <Text style={{ fontSize: 22, fontFamily: Theme.fonts.text700 }}>Benjamin Franklin</Text>
-                            <Text style={{ fontSize: 15, fontFamily: Theme.fonts.text400, color: Theme.colors.light.text2 }}>ben@gmail.com</Text>
+                            <Text style={{ fontSize: 22, fontFamily: Theme.fonts.text700 }}>{userInfo.firstname} {userInfo.lastname}</Text>
+                            <Text style={{ fontSize: 15, fontFamily: Theme.fonts.text400, color: Theme.colors.light.text2 }}>{userInfo.email}</Text>
                             <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}
                                 style={{ padding: 5, marginTop: 0 }}>
                                 <FontAwesomeIcon icon={faUserEdit} color={Theme.colors.primary} size={25} />

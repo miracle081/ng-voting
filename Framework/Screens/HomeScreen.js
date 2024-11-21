@@ -1,5 +1,5 @@
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Profile } from './Profile';
 import { Theme } from '../Components/Theme';
@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { VotingStatus } from './VotingStatus';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel from 'react-native-reanimated-carousel';
+import { AppContext } from '../Components/globalVariables';
 
 const carouselLinks = [
   "https://img.freepik.com/free-photo/back-view-woman-protesting-outdoors_23-2150246570.jpg?t=st=1732111039~exp=1732114639~hmac=37bbb0bbc65eeac8d84c17e65e6f263ed87df66162acfd14ec9b6d8c06fb7137&w=2000",
@@ -15,13 +16,14 @@ const carouselLinks = [
 ];
 
 function Home() {
-  const { width, height } = Dimensions.get("screen")
-  console.log(width);
+  const { userUID } = useContext(AppContext)
+  const { width, height } = Dimensions.get("screen");
 
   return (
     <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
       <View style={{ padding: 20, }}>
         <Text>HomeScreen</Text>
+        <Text>User ID: {userUID}</Text>
         <View style={{ marginVertical: 10, }}>
           <Carousel
             loop
