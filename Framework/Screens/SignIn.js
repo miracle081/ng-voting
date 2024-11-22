@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Theme } from "../Components/Theme";
 import { AppButton } from "../Components/AppButton";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -6,6 +6,8 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useContext } from "react";
 import { AppContext } from "../Components/globalVariables";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase/settings";
 
 const validation = yup.object({
     email: yup.string().email().required(),
@@ -31,10 +33,16 @@ export function SignIn({ navigation, route }) {
             <Formik
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(value, form) => {
-                    console.log(value);
-                    form.resetForm()
-                    setUserInfo(value)
-                    navigation.navigate("HomeScreen")
+                    signInWithEmailAndPassword(auth, value.email, value.password)
+                        .then(() => {
+                            setUserInfo(value)
+                            form.resetForm()
+                            navigation.navigate("HomeScreen")
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            Alert.alert("Error", error.code)
+                        });
                 }}
                 validationSchema={validation}
             >
@@ -75,6 +83,11 @@ export function SignIn({ navigation, route }) {
                     }
                 }
             </Formik>
+            <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "center", marginBottom: 30 }}>
+                <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+                    <Text style={{ fontFamily: Theme.fonts.text400, fontSize: 16 }}>Don't have an account? <Text style={{ fontFamily: Theme.fonts.text700, color: Theme.colors.primary }}>Sign Up</Text></Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 };
