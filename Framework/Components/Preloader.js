@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, } from 'react-native';
 import AnimatedLottieView from 'lottie-react-native';
-import { AppContext } from '../../global/globalVariables';
+import { AppContext } from './globalVariables';
 
 export function Preloader() {
     const { preloader } = useContext(AppContext);

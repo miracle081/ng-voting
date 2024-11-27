@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { AppProvider } from './Framework/Components/globalVariables';
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import { Preloader } from './Framework/Components/Preloader';
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -38,6 +39,7 @@ export default function App() {
     <AppProvider>
       <KeyboardAvoidingView behavior={Platform.OS == "ios" ? 'padding' : null} style={{ flex: 1 }}>
         <StackNavigator />
+        <Preloader />
       </KeyboardAvoidingView>
     </AppProvider>
   );

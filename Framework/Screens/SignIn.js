@@ -15,7 +15,7 @@ const validation = yup.object({
 })
 
 export function SignIn({ navigation, route }) {
-    const { setUserInfo, setPreloader, } = useContext(AppContext);
+    const { setUserUID, setPreloader, } = useContext(AppContext);
 
     // console.log(route.params);
 
@@ -33,13 +33,16 @@ export function SignIn({ navigation, route }) {
             <Formik
                 initialValues={{ email: "", password: "" }}
                 onSubmit={(value, form) => {
+                    setPreloader(true)
                     signInWithEmailAndPassword(auth, value.email, value.password)
-                        .then(() => {
-                            setUserInfo(value)
+                        .then((data) => {
+                            setPreloader(false)
+                            setUserUID(data.user.uid)
                             form.resetForm()
                             navigation.navigate("HomeScreen")
                         })
                         .catch((error) => {
+                            setPreloader(false)
                             console.log(error);
                             Alert.alert("Error", error.code)
                         });

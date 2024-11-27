@@ -7,7 +7,8 @@ import * as yup from "yup";
 import { useContext } from "react";
 import { AppContext } from "../Components/globalVariables";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../Firebase/settings";
+import { auth, db } from "../Firebase/settings";
+import { doc, setDoc } from "firebase/firestore";
 
 const validation = yup.object({
     firstname: yup.string().min(2).required(),
@@ -25,7 +26,7 @@ const validation = yup.object({
 })
 
 export function SignUp({ navigation, route }) {
-    const { setUserInfo, setPreloader, } = useContext(AppContext);
+    const { setUserInfo, setPreloader, setUserUID } = useContext(AppContext);
 
     // console.log(route.params);
 
@@ -44,12 +45,31 @@ export function SignUp({ navigation, route }) {
                 <Formik
                     initialValues={{ firstname: "", lastname: "", phone: "", address: "", email: "", password: "" }}
                     onSubmit={(value, form) => {
-                        console.log(value);
+                        setPreloader(true)
                         createUserWithEmailAndPassword(auth, value.email, value.password)
-                            .then(() => {
-                                setUserInfo(value)
-                                form.resetForm()
-                                navigation.navigate("HomeScreen")
+                            .then((data) => {
+                                const { uid } = data.user;
+
+                                setDoc(doc(db, "users", uid), {
+                                    firstname: value.firstname,
+                                    lastname: value.lastname,
+                                    email: value.email,
+                                    userUID: uid,
+                                    balance: 0,
+                                    cart: [],
+                                    image: null,
+                                    phone: value.phone,
+                                    address: value.address,
+                                    role: "user",
+                                }).then((data) => {
+                                    setPreloader(false)
+                                    setUserUID(uid)
+                                    form.resetForm()
+                                    navigation.replace("HomeScreen")
+                                }).catch(e => {
+                                    setPreloader(false)
+                                    console.log(e)
+                                })
                             })
                             .catch((error) => {
                                 console.log(error);
