@@ -10,6 +10,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import { AppContext } from '../Components/globalVariables';
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../Firebase/settings';
+import { PostCandidate } from './PostCandidate';
 
 const carouselLinks = [
   "https://img.freepik.com/free-photo/back-view-woman-protesting-outdoors_23-2150246570.jpg?t=st=1732111039~exp=1732114639~hmac=37bbb0bbc65eeac8d84c17e65e6f263ed87df66162acfd14ec9b6d8c06fb7137&w=2000",
@@ -20,6 +21,7 @@ const carouselLinks = [
 function Home() {
   const { userUID, setUserInfo, setPreloader } = useContext(AppContext)
   const { width, height } = Dimensions.get("screen");
+
 
   function getUserInfo() {
     setPreloader(true);
@@ -83,6 +85,9 @@ export function HomeScreen() {
             iconName = focused ? 'bar-chart' : 'bar-chart-outline';
           }
 
+          else if (route.name === 'PostCandidate') {
+            iconName = focused ? 'person-add' : 'person-add-outline';
+          }
           else if (route.name === 'Profile') {
             iconName = focused ? 'person' : 'person-outline';
           }
@@ -95,8 +100,9 @@ export function HomeScreen() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="PostCandidate" component={PostCandidate} options={{ title: "Post Candidate" }} />
       <Tab.Screen name="VotingStatus" component={VotingStatus} options={{ title: "Voting Status" }} />
-      <Tab.Screen name="Profile" component={Profile} options={{ title: "Account" }} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }

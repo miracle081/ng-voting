@@ -56,7 +56,6 @@ export function SignUp({ navigation, route }) {
                                     email: value.email,
                                     userUID: uid,
                                     balance: 0,
-                                    cart: [],
                                     image: null,
                                     phone: value.phone,
                                     address: value.address,
