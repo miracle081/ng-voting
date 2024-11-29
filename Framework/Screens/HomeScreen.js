@@ -1,5 +1,5 @@
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useEffect } from 'react'
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Profile } from './Profile';
 import { Theme } from '../Components/Theme';
@@ -8,9 +8,11 @@ import { VotingStatus } from './VotingStatus';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel from 'react-native-reanimated-carousel';
 import { AppContext } from '../Components/globalVariables';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../Firebase/settings';
 import { PostCandidate } from './PostCandidate';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faVoteYea } from '@fortawesome/free-solid-svg-icons';
 
 const carouselLinks = [
   "https://img.freepik.com/free-photo/back-view-woman-protesting-outdoors_23-2150246570.jpg?t=st=1732111039~exp=1732114639~hmac=37bbb0bbc65eeac8d84c17e65e6f263ed87df66162acfd14ec9b6d8c06fb7137&w=2000",
@@ -19,8 +21,9 @@ const carouselLinks = [
 ];
 
 function Home() {
-  const { userUID, setUserInfo, setPreloader } = useContext(AppContext)
+  const { userUID, setUserInfo, userInfo, setPreloader } = useContext(AppContext)
   const { width, height } = Dimensions.get("screen");
+  const [candidates, setCandidates] = useState([])
 
 
   function getUserInfo() {
@@ -38,8 +41,21 @@ function Home() {
     });
   }
 
+  const getCandidates = async () => {
+    onSnapshot(collection(db, 'candidates'), (snapshot) => {
+      const allData = []
+      snapshot.forEach(item => {
+        allData.push({ ...item.data(), docID: item.id })
+      })
+      setCandidates(allData);
+      setPreloader(false)
+      // console.log(allData);
+    });
+  };
+
   useEffect(() => {
     getUserInfo();
+    getCandidates();
 
   }, [])
 
@@ -47,20 +63,42 @@ function Home() {
   return (
     <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
       <View style={{ padding: 20, }}>
-        <Text>HomeScreen</Text>
-        <Text>User ID: {userUID}</Text>
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <Image style={{ width: 50, height: 50, borderRadius: 50, borderWidth: 1, borderColor: Theme.colors.gray }}
+            source={require("../../assets/user.png")} />
+          <View style={{}}>
+            <Text style={{ fontSize: 18, fontFamily: Theme.fonts.text700 }}>{userInfo.firstname} {userInfo.lastname}</Text>
+            <Text style={{ fontSize: 13, fontFamily: Theme.fonts.text400, color: Theme.colors.gray }}>Secure voting...</Text>
+          </View>
+        </View>
+
         <View style={{ marginVertical: 10, }}>
           <Carousel
             loop
             width={width - 40}
-            height={200}
+            height={215}
             autoPlay={true}
-            data={carouselLinks}
+            data={candidates}
             style={{ borderRadius: 10 }}
             scrollAnimationDuration={2000}
-            renderItem={({ index }) => (
-              <Image style={{ width: '100%', height: 200, borderRadius: 10, }} source={{ uri: carouselLinks[index] }} />
-            )}
+            renderItem={({ index }) => {
+              let item = candidates[index]
+              return (
+                <View style={{ flexDirection: "row", gap: 20, borderWidth: 1, borderColor: Theme.colors.gray, padding: 10, borderRadius: 10 }}>
+                  <Image style={{ width: 150, height: 150, borderRadius: 10, }} source={{ uri: item.image }} />
+                  <View style={{ flex: 1, }}>
+                    <Text style={{ fontSize: 20, fontFamily: Theme.fonts.text700 }}>{item.firstname} {item.lastname}</Text>
+                    <Text style={{ fontSize: 14, fontFamily: Theme.fonts.text400, color: Theme.colors.gray }}>President</Text>
+                    <Text style={{ fontSize: 14, fontFamily: Theme.fonts.text400, color: Theme.colors.gray }}>Party: {item.party}</Text>
+                    <View style={{ flexDirection: "row", gap: 2, marginTop: 5 }}>
+                      <FontAwesomeIcon icon={faVoteYea} size={20} color={Theme.colors.green} />
+                      <Text style={{ fontSize: 14, fontFamily: Theme.fonts.text600, }}>{item.votes}</Text>
+                    </View>
+                    <Text numberOfLines={2} style={{ fontSize: 14, fontFamily: Theme.fonts.text400, color: Theme.colors.gray }}>{item.bio}</Text>
+                  </View>
+                </View>
+              )
+            }}
           />
         </View>
       </View>
