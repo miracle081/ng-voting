@@ -41,8 +41,9 @@ export function Profile({ navigation }) {
             } showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                     <View style={{ flexDirection: "row", gap: 10 }}>
-                        <Image style={{ width: 90, height: 90, borderRadius: 20, borderWidth: 1, borderColor: Theme.colors.gray }}
-                            source={require("../../assets/user.jpg")} />
+                        <Image style={{ width: 90, height: 90, borderRadius: 20, borderWidth: 0.4, borderColor: Theme.colors.gray }}
+                            source={{ uri: userInfo.image }}
+                            defaultSource={require("../../assets/user.jpg")} />
 
                         <View style={{ marginBottom: 10, }}>
                             <Text style={{ fontSize: 22, fontFamily: Theme.fonts.text700 }}>{userInfo.firstname} {userInfo.lastname}</Text>
@@ -53,10 +54,14 @@ export function Profile({ navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{ marginTop: 20, borderColor: Theme.colors.light.line, borderWidth: 0, borderRadius: 10, padding: 10 }}>
+                    <View style={{ marginTop: 20, backgroundColor: Theme.colors.light.bg2, borderRadius: 10, padding: 15, }}>
                         <Text style={{ fontSize: 15, fontFamily: Theme.fonts.text500, }}>Wallet Balance</Text>
-                        <Text style={{ fontSize: 13, fontFamily: Theme.fonts.text700, }}>₦<Text style={{ fontSize: 30 }}>{formatMoney(98000)}</Text></Text>
+                        <Text style={{ fontSize: 13, fontFamily: Theme.fonts.text700 }}>₦<Text style={{ fontSize: 30 }}>{formatMoney(userInfo.balance)}</Text></Text>
+
+                        <AppButton onPress={() => navigation.navigate("FundAccount")} style={{ marginTop: 10 }}>Fund</AppButton>
                     </View>
+
+
                     <View style={{ flex: 1, marginTop: 10, paddingTop: 20, }}>
 
 

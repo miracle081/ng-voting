@@ -7,12 +7,13 @@ import { Modal } from "react-native";
 import { } from "react-native";
 import { Theme } from "../Components/Theme";
 import * as Imagepicker from "expo-image-picker"
-import { AppBotton } from "../Components/AppButton";
 import { AppContext } from "../Components/globalVariables";
 import { doc, updateDoc } from "firebase/firestore";
 import { db, imgStorage, storage } from "../Firebase/settings";
 import { errorMessage } from "../Components/formatErrorMessage";
 import { getDownloadURL, ref } from "firebase/storage";
+import { AppButton } from "../Components/AppButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export function EditProfile({ navigation }) {
@@ -25,7 +26,6 @@ export function EditProfile({ navigation }) {
     const [lastname, setlastname] = useState(userInfo.lastname);
     const [address, setaddress] = useState(userInfo.address);
     const [phone, setphone] = useState(userInfo.phone);
-    const [username, setusername] = useState(userInfo.username);
     const width = Dimensions.get("screen").width
 
 
@@ -130,16 +130,16 @@ export function EditProfile({ navigation }) {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.body}>
                 {/* <ScrollView > */}
                 <View style={styles.header}>
                     <View style={{ position: "relative" }}>
-                        <Pressable onPress={imageModal}>
+                        <TouchableOpacity onPress={imageModal}>
                             <Image source={{ uri: userInfo.image }}
                                 defaultSource={require("../../assets/user.jpg")}
                                 style={styles.ProfileImage} />
-                        </Pressable>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={closeModal} style={styles.BtnIcon}>
                             <FontAwesomeIcon icon={faCameraRetro} color="#16171D" size={15} />
                         </TouchableOpacity>
@@ -169,7 +169,6 @@ export function EditProfile({ navigation }) {
                             onChangeText={(text) => setlastname(text.trim())}
                             value={lastname}
                         />
-
                         <Text style={styles.signupText}>Phone Number</Text>
                         <TextInput
                             style={styles.inputStyle}
@@ -199,7 +198,7 @@ export function EditProfile({ navigation }) {
                             editable={false}
                         />
                         <View style={{ marginTop: 10 }}>
-                            <AppBotton onPress={updateUser}>Update Profile</AppBotton>
+                            <AppButton onPress={updateUser}>Update Profile</AppButton>
                         </View>
                     </View>
                 </ScrollView>
@@ -299,14 +298,15 @@ export function EditProfile({ navigation }) {
             {/* ============================> Profile Modal <============================ */}
             <Modal
                 visible={imageMD}
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
+                presentationStyle="formSheet"
             >
                 <View style={{ flex: 1, backgroundColor: "#16171df4" }}>
                     <Pressable style={{ flex: 1 }} onPress={imageModal} >
                     </Pressable>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                        <Image source={require("../../assets/user.jpg")}
+                        <Image source={{ uri: userInfo.image }} defaultSource={require("../../assets/user.jpg")}
                             style={{ width: width - 5, height: width - 5 }}
                         />
                     </View>
@@ -314,7 +314,7 @@ export function EditProfile({ navigation }) {
                     </Pressable>
                 </View>
             </Modal>
-        </View >
+        </SafeAreaView>
     )
 }
 

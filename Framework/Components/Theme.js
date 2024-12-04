@@ -17,7 +17,7 @@ export const Theme = {
             bg2: "#f0f0f0",
             text1: "#000000e2",
             text2: "#00000099",
-            line: "rgba(0,0,0,0.1)",
+            line: "#0000001a",
         },
         dark: {
             layer: "#202020",
@@ -25,7 +25,7 @@ export const Theme = {
             bg2: "#212121",
             text1: "#ffffff",
             text2: "#ffffff99",
-            line: "rgba(255,255,255,0.1)"
+            line: "#ffffff1a"
         },
     },
     fonts: {
