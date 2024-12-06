@@ -12,7 +12,7 @@ import { addDoc, collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '../Firebase/settings';
 import { PostCandidate } from './PostCandidate';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faVoteYea } from '@fortawesome/free-solid-svg-icons';
+import { faIdCard, faIdCardClip, faMoneyCheckDollar, faNairaSign, faNewspaper, faVoteYea } from '@fortawesome/free-solid-svg-icons';
 
 const carouselLinks = [
   "https://img.freepik.com/free-photo/back-view-woman-protesting-outdoors_23-2150246570.jpg?t=st=1732111039~exp=1732114639~hmac=37bbb0bbc65eeac8d84c17e65e6f263ed87df66162acfd14ec9b6d8c06fb7137&w=2000",
@@ -21,9 +21,8 @@ const carouselLinks = [
 ];
 
 function Home() {
-  const { userUID, setUserInfo, userInfo, setPreloader } = useContext(AppContext)
+  const { userUID, setUserInfo, userInfo, setPreloader, candidates, setCandidates, setSearchQuery } = useContext(AppContext)
   const { width, height } = Dimensions.get("screen");
-  const [candidates, setCandidates] = useState([])
 
 
   function getUserInfo() {
@@ -47,7 +46,8 @@ function Home() {
       snapshot.forEach(item => {
         allData.push({ ...item.data(), docID: item.id })
       })
-      setCandidates(allData);
+      setCandidates(allData.sort((a, b) => b.votes - a.votes));
+      setSearchQuery(allData.sort((a, b) => b.votes - a.votes));
       setPreloader(false)
       // console.log(allData);
     });
@@ -72,7 +72,7 @@ function Home() {
           </View>
         </View>
 
-        <View style={{ marginVertical: 10, }}>
+        <View style={{ marginVertical: 10, height: 200 }}>
           <Carousel
             loop
             width={width - 40}
@@ -101,12 +101,76 @@ function Home() {
             }}
           />
         </View>
+
+        <View>
+          <TouchableOpacity style={styles.card}>
+            <View style={styles.iconView}>
+              <FontAwesomeIcon icon={faIdCard} size={30} color={Theme.colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.cardText}>Get Voters Card</Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, fontFamily: Theme.fonts.text400, color: Theme.colors.light.text2 }}>You can check your voter status by entering your details in the form on this page.</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.card}>
+            <View style={styles.iconView}>
+              <FontAwesomeIcon icon={faIdCardClip} size={30} color={Theme.colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.cardText}>Get NIN</Text>
+              <Text numberOfLines={1} style={{ fontSize: 13, fontFamily: Theme.fonts.text400, color: Theme.colors.light.text2 }}>National Identification Number (NIN) enrolment and issuance</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.card}>
+            <View style={styles.iconView}>
+              <FontAwesomeIcon icon={faIdCardClip} size={30} color={Theme.colors.primary} />
+            </View>
+            <View>
+              <Text style={styles.cardText}>CAC Registration</Text>
+              <Text style={{ fontSize: 13, fontFamily: Theme.fonts.text400, color: Theme.colors.light.text2 }}>Get Corporate Affairs Commission Certificate</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.card}>
+            <View style={styles.iconView}>
+              <FontAwesomeIcon icon={faNairaSign} size={30} color={Theme.colors.primary} />
+            </View>
+            <View>
+              <Text style={styles.cardText}>FG Loan</Text>
+              <Text style={{ fontSize: 13, fontFamily: Theme.fonts.text400, color: Theme.colors.light.text2 }}>The loan is nine per cent three years tenure.</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   )
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: 10,
+    padding: 10,
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    backgroundColor: Theme.colors.primary + 10,
+    marginTop: 10
+  },
+  iconView: {
+    borderWidth: 0.2,
+    borderColor: Theme.colors.primary,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Theme.colors.primary + 30,
+  },
+  cardText: {
+    fontSize: 20,
+    fontFamily: Theme.fonts.text700,
+    color: Theme.colors.primary,
+  }
+});
 
 const Tab = createBottomTabNavigator();
 export function HomeScreen() {
